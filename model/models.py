@@ -280,18 +280,18 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
               unique_trade_date[i - rebalance_window - validation_window])
 
         print("======SAC Training========")
-        if model_sac:
-            print("update training")
-
-            start = time.time()
-            model_sac.learn(total_timesteps=30000)
-            end = time.time()
-            model_name = "SAC_30k_dow"
-            model_sac.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
-            print('Training time (SAC): ', (end - start) / 60, ' minutes')
-        else:
-            print("first training")
-            model_sac = train_SAC(env_train, model_name="SAC_30k_dow", timesteps=30000)
+        # if model_sac:
+        #     print("update training")
+        #
+        #     start = time.time()
+        #     model_sac.learn(total_timesteps=30000)
+        #     end = time.time()
+        #     model_name = "SAC_30k_dow"
+        #     model_sac.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
+        #     print('Training time (SAC): ', (end - start) / 60, ' minutes')
+        # else:
+        #     print("first training")
+        model_sac = train_SAC(env_train, model_name="SAC_25k_dow_{}".format(i), timesteps=25000)
         print("======SAC Validation from: ", unique_trade_date[i - rebalance_window - validation_window], "to ",
               unique_trade_date[i - rebalance_window])
         DRL_validation(model=model_sac, test_data=validation, test_env=env_val, test_obs=obs_val)
@@ -299,36 +299,36 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
         print("SAC Sharpe Ratio: ", sharpe_sac)
 
         print("======TD3 Training========")
-        if model_td3:
-            print("update training")
-            start = time.time()
-            model_td3.learn(total_timesteps=30000)
-            end = time.time()
-            model_name = "TD3_30k_dow"
-            model_td3.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
-            print('Training time (TD3): ', (end - start) / 60, ' minutes')
-
-        else:
-            print("first training")
-            model_td3 = train_TD3(env_train, model_name="TD3_30k_dow", timesteps=30000)
+        # if model_td3:
+        #     print("update training")
+        #     start = time.time()
+        #     model_td3.learn(total_timesteps=20000)
+        #     end = time.time()
+        #     model_name = "TD3_30k_dow"
+        #     model_td3.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
+        #     print('Training time (TD3): ', (end - start) / 60, ' minutes')
+        #
+        # else:
+        #     print("first training")
+        model_td3 = train_TD3(env_train, model_name="TD3_35k_dow_{}".format(i), timesteps=35000)
         print("======TD3 Validation from: ", unique_trade_date[i - rebalance_window - validation_window], "to ",
               unique_trade_date[i - rebalance_window])
         DRL_validation(model=model_td3, test_data=validation, test_env=env_val, test_obs=obs_val)
         sharpe_td3 = get_validation_sharpe(i)
         print("TD3 Sharpe Ratio: ", sharpe_td3)
         #
-        print("======TRPO Training========")
-        if model_trpo:
-            print("update training")
-            start = time.time()
-            model_trpo.learn(total_timesteps=40000)
-            end = time.time()
-            model_name = "TRPO_40k_dow"
-            model_trpo.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
-            print('Training time (TRPO): ', (end - start) / 60, ' minutes')
-        else:
-            print("first training")
-            model_trpo = train_TRPO(env_train, model_name="TRPO_40k_dow", timesteps=40000)
+        # print("======TRPO Training========")
+        # if model_trpo:
+        #     print("update training")
+        #     start = time.time()
+        #     model_trpo.learn(total_timesteps=20000)
+        #     end = time.time()
+        #     model_name = "TRPO_30k_dow"
+        #     model_trpo.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
+        #     print('Training time (TRPO): ', (end - start) / 60, ' minutes')
+        # else:
+        #     print("first training")
+        model_trpo = train_TRPO(env_train, model_name="TRPO_40k_dow_{}".format(i), timesteps=40000)
 
         print("======TRPO Validation from: ", unique_trade_date[i - rebalance_window - validation_window], "to ",
               unique_trade_date[i - rebalance_window])
@@ -341,12 +341,7 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
         trpo_sharpe_list.append(sharpe_trpo)
 
         # Model Selection based on sharpe ratio
-        # if (sharpe_sac >= sharpe_a2c):
-        #     model_ensemble = model_sac
-        #     model_use.append('SAC')
-        # else:
-        #     model_ensemble = model_a2c
-        #     model_use.append('A2C')
+
         if (sharpe_sac >= sharpe_td3) & (sharpe_sac >= sharpe_trpo):
             model_ensemble = model_sac
             model_use.append('SAC')
@@ -357,12 +352,8 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
             model_ensemble = model_trpo
             model_use.append('TRPO')
 
-        # if (sharpe_td3 <= sharpe_sac):
-        #     model_ensemble = model_sac
-        #     model_use.append('SAC')
-        # else:
-        #     model_ensemble = model_td3
-        #     model_use.append('TD3')
+        # model_ensemble = model_sac
+        # model_use.append('SAC')
         ############## Training and Validation ends ##############
 
         ############## Trading starts ##############
