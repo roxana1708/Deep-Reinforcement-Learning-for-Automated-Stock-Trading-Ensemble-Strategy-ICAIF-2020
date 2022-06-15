@@ -167,8 +167,9 @@ def DRL_prediction(df,
             # print(env_test.render())
             last_state = env_trade.render()
 
-    df_last_state = pd.DataFrame({'last_state': last_state})
-    df_last_state.to_csv('results/last_state_{}_{}.csv'.format(name, i), index=False)
+        df_last_state = pd.DataFrame({'last_state': last_state})
+        df_last_state.to_csv('results/last_state_{}_{}.csv'.format(name, i), index=False)
+
     return last_state
 
 
@@ -317,7 +318,7 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
         sharpe_td3 = get_validation_sharpe(i)
         print("TD3 Sharpe Ratio: ", sharpe_td3)
         #
-        # print("======TRPO Training========")
+        print("======TRPO Training========")
         # if model_trpo:
         #     print("update training")
         #     start = time.time()

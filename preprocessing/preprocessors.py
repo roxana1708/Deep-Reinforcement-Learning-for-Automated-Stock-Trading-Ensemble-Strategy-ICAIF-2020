@@ -58,12 +58,12 @@ def add_technical_indicator(df):
 
     macd = pd.DataFrame()
     trix = pd.DataFrame()
+    macd = pd.DataFrame()
     rsi = pd.DataFrame()
-    vr = pd.DataFrame()
-    cci = pd.DataFrame()
+    macd = pd.DataFrame()
     dx = pd.DataFrame()
     ppo = pd.DataFrame()
-    close_7_smma = pd.DataFrame()
+    cci = pd.DataFrame()
 
     #temp = stock[stock.tic == unique_ticker[0]]['macd']
     for i in range(len(unique_ticker)):
@@ -72,48 +72,48 @@ def add_technical_indicator(df):
         # temp_macd = pd.DataFrame(temp_macd)
         # macd = macd.append(temp_macd, ignore_index=True)
         ## trix
-        temp_trix = stock[stock.tic == unique_ticker[i]]['trix']
-        temp_trix = pd.DataFrame(temp_trix)
-        trix = trix.append(temp_trix, ignore_index=True)
-        ## close_7_smma
-        temp_close_7_smma = stock[stock.tic == unique_ticker[i]]['close_7_smma']
-        temp_close_7_smma = pd.DataFrame(temp_close_7_smma)
-        close_7_smma = close_7_smma.append(temp_close_7_smma, ignore_index=True)
-        ## stoch_rsi
-        # temp_rsi = stock[stock.tic == unique_ticker[i]]['stochrsi']
-        # temp_rsi = pd.DataFrame(temp_rsi)
-        # rsi = rsi.append(temp_rsi, ignore_index=True)
-        ## rsi
-        # temp_rsi = stock[stock.tic == unique_ticker[i]]['rsi_30']
-        # temp_rsi = pd.DataFrame(temp_rsi)
-        # rsi = rsi.append(temp_rsi, ignore_index=True)
-        ## vr
-        # temp_vr = stock[stock.tic == unique_ticker[i]]['vr']
-        # temp_vr = pd.DataFrame(temp_vr)
-        # vr = vr.append(temp_vr, ignore_index=True)
+        # temp_trix = stock[stock.tic == unique_ticker[i]]['trix']
+        # temp_trix = pd.DataFrame(temp_trix)
+        # trix = trix.append(temp_trix, ignore_index=True)
         ## cci
-        temp_cci = stock[stock.tic == unique_ticker[i]]['cci_30']
+        temp_cci = stock[stock.tic == unique_ticker[i]]['cci']
         temp_cci = pd.DataFrame(temp_cci)
         cci = cci.append(temp_cci, ignore_index=True)
+        ## stoch_macd
+        # temp_macd = stock[stock.tic == unique_ticker[i]]['stochmacd']
+        # temp_macd = pd.DataFrame(temp_macd)
+        # macd = macd.append(temp_macd, ignore_index=True)
+        ## macd
+        # temp_macd = stock[stock.tic == unique_ticker[i]]['macd_30']
+        # temp_macd = pd.DataFrame(temp_macd)
+        # macd = macd.append(temp_macd, ignore_index=True)
+        ## stochastic rsi
+        temp_rsi = stock[stock.tic == unique_ticker[i]]['stochrsi']
+        temp_rsi = pd.DataFrame(temp_rsi)
+        rsi = rsi.append(temp_rsi, ignore_index=True)
+        ## macd
+        temp_macd = stock[stock.tic == unique_ticker[i]]['macd']
+        temp_macd = pd.DataFrame(temp_macd)
+        macd = macd.append(temp_macd, ignore_index=True)
         ## adx
-        # temp_dx = stock[stock.tic == unique_ticker[i]]['dx_30']
-        # temp_dx = pd.DataFrame(temp_dx)
-        # dx = dx.append(temp_dx, ignore_index=True)
+        temp_dx = stock[stock.tic == unique_ticker[i]]['dx_30']
+        temp_dx = pd.DataFrame(temp_dx)
+        dx = dx.append(temp_dx, ignore_index=True)
 
         ## ppo
-        temp_ppo = stock[stock.tic == unique_ticker[i]]['ppos']
-        temp_ppo = pd.DataFrame(temp_ppo)
-        ppo = ppo.append(temp_ppo, ignore_index=True)
+        # temp_ppo = stock[stock.tic == unique_ticker[i]]['ppos']
+        # temp_ppo = pd.DataFrame(temp_ppo)
+        # ppo = ppo.append(temp_ppo, ignore_index=True)
 
 
-    df['trix'] = trix
+    # df['trix'] = trix
     # df['macd'] = macd
-    df['close_7_smma'] = close_7_smma
-    # df['rsi'] = rsi
-    # df['vr'] = vr
     df['cci'] = cci
-    # df['adx'] = dx
-    df['ppo'] = ppo
+    # df['macd'] = macd
+    df['rsi'] = rsi
+    df['macd'] = macd
+    df['adx'] = dx
+    # df['ppo'] = ppo
 
     return df
 
