@@ -48,24 +48,6 @@ def run_model() -> None:
     validation_window = 63
     
     ## Ensemble Strategy
-    # print(data[0:15:15])
-    # print("LEN")
-    # print(len(data))
-    # data_param = []
-    # print(2*len(data)/15)
-    # for i in range(0, int(2*len(data)/15)):
-    #     if i % 2 == 0:
-    #         # print(data[(i*15):((i+1)*15)])
-    #         # exit()
-    #         # data_param = data_param + data[(i*15):((i+1)*15)]
-    #         # print(data.keys())
-    #         # exit()
-    #         print(data[0:30])
-    #     else:
-    #         pass
-    # print("New df")
-    # print(data_param[0:30])
-
     run_ensemble_strategy(df=data,
                           unique_trade_date=unique_trade_date,
                           rebalance_window=rebalance_window,
@@ -77,7 +59,7 @@ def run_model() -> None:
 def run_our_saved_model() -> None:
     """ run training with saved model"""
 
-    preprocessed_path = "done_data_new_indicators_v9.csv"
+    preprocessed_path = "done_data_new_indicators_v12.csv" #final
     if os.path.exists(preprocessed_path):
         data = pd.read_csv(preprocessed_path, index_col=0)
     else:
@@ -112,7 +94,7 @@ def run_original_saved_model() -> None:
     # preprocessed_path = "done_data.csv"
     # preprocessed_path = "done_data_new_indicators.csv"
     # preprocessed_path = "done_data_new_indicators_v2.csv"
-    preprocessed_path = "done_data.csv"
+    preprocessed_path = "origina_done_data.csv"
     if os.path.exists(preprocessed_path):
         data = pd.read_csv(preprocessed_path, index_col=0)
         # data = pd.concat((x.query("index % 30 < 15") for x in data_read), ignore_index=True)

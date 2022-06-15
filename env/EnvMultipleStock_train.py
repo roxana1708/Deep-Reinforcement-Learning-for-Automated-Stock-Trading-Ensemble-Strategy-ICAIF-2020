@@ -32,7 +32,7 @@ class StockEnvTrain(gym.Env):
         # action_space normalization and shape is STOCK_DIM
         self.action_space = spaces.Box(low=-1, high=1, shape=(STOCK_DIM,))
         # Shape = 181: [Current Balance]+[prices 1-30]+[owned shares 1-30] 
-        # +[rsi 1-30]+ [trix 1-30] + [close_7_smma 1-30] + [ppo 1-30]
+        # +[close_7_smma 1-30]+ [macd 1-30] + [cci 1-30] + [ppo 1-30]
         self.observation_space = spaces.Box(low=0, high=np.inf, shape=(181,))
         # load data from a pandas dataframe
         self.data = self.df.loc[self.day, :]
@@ -41,9 +41,9 @@ class StockEnvTrain(gym.Env):
         self.state = [INITIAL_ACCOUNT_BALANCE] + \
                       self.data.adjcp.values.tolist() + \
                       [0]*STOCK_DIM + \
-                      self.data.rsi.values.tolist() + \
-                      self.data.trix.values.tolist() + \
                       self.data.close_7_smma.values.tolist() + \
+                      self.data.macd.values.tolist() + \
+                      self.data.cci.values.tolist() + \
                       self.data.ppo.values.tolist()
         # initialize reward
         self.reward = 0
@@ -147,9 +147,9 @@ class StockEnvTrain(gym.Env):
             self.state =  [self.state[0]] + \
                     self.data.adjcp.values.tolist() + \
                     list(self.state[(STOCK_DIM+1):(STOCK_DIM*2+1)]) + \
-                    self.data.rsi.values.tolist() + \
-                    self.data.trix.values.tolist() + \
                     self.data.close_7_smma.values.tolist() + \
+                    self.data.macd.values.tolist() + \
+                    self.data.cci.values.tolist() + \
                     self.data.ppo.values.tolist()
             
             end_total_asset = self.state[0] + \
@@ -177,9 +177,9 @@ class StockEnvTrain(gym.Env):
         self.state = [INITIAL_ACCOUNT_BALANCE] + \
                       self.data.adjcp.values.tolist() + \
                       [0]*STOCK_DIM + \
-                      self.data.rsi.values.tolist() + \
-                      self.data.trix.values.tolist() + \
                       self.data.close_7_smma.values.tolist() + \
+                      self.data.macd.values.tolist() + \
+                      self.data.cci.values.tolist() + \
                       self.data.ppo.values.tolist() 
         # iteration += 1 
         return self.state

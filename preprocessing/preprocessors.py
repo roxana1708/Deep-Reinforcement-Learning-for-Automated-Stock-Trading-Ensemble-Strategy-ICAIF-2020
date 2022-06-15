@@ -88,7 +88,7 @@ def add_technical_indicator(df):
         # temp_macd = pd.DataFrame(temp_macd)
         # macd = macd.append(temp_macd, ignore_index=True)
         ## stochastic rsi
-        temp_rsi = stock[stock.tic == unique_ticker[i]]['stochrsi']
+        temp_rsi = stock[stock.tic == unique_ticker[i]]['rsi']
         temp_rsi = pd.DataFrame(temp_rsi)
         rsi = rsi.append(temp_rsi, ignore_index=True)
         ## macd

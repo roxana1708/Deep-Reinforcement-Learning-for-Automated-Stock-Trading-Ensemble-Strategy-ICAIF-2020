@@ -28,7 +28,7 @@ from env.EnvMultipleStock_train import StockEnvTrain
 from env.EnvMultipleStock_validation import StockEnvValidation
 from env.EnvMultipleStock_trade import StockEnvTrade
 
-f = open("output_results/trix+smma+rsi+ppo_7.txt", "w+")
+f = open("output_results/macd+smma+cci+ppo_8.txt", "w+")
 
 def DRL_prediction(df,
                    model,
@@ -160,7 +160,7 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 
         f.write("======SAC Training========\n")
         # model_sac = train_SAC(env_train, model_name="SAC_30k_dow_{}".format(i), timesteps=30000)
-        model_sac = SAC.load("trained_models/rsi_instead_of_cci/SAC_25k_dow_{}".format(i))
+        model_sac = SAC.load("trained_models/macd+smma+cci+ppo/SAC_25k_dow_{}".format(i))
                              # .format(i))
         f.write("======SAC Validation from: " + str(unique_trade_date[i - rebalance_window - validation_window]) + " to " + str(unique_trade_date[i - rebalance_window]) + "\n")
         DRL_validation(model=model_sac, test_data=validation, test_env=env_val, test_obs=obs_val)
@@ -169,7 +169,7 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 
         f.write("======TD3 Training========\n")
         # model_td3 = train_TD3(env_train, model_name="TD3_30k_dow_{}".format(i), timesteps=30000)
-        model_td3 = TD3.load("trained_models/rsi_instead_of_cci/TD3_35k_dow_{}".format(i))
+        model_td3 = TD3.load("trained_models/macd+smma+cci+ppo/TD3_35k_dow_{}".format(i))
         # .format(i))
         f.write("======TD3 Validation from: " + str(unique_trade_date[i - rebalance_window - validation_window]) + " to " + str(unique_trade_date[i - rebalance_window]) + "\n")
         DRL_validation(model=model_td3, test_data=validation, test_env=env_val, test_obs=obs_val)
@@ -178,7 +178,7 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 
         f.write("======TRPO Training========" + "\n")
         # model_trpo = train_TRPO(env_train, model_name="TRPO_40k_dow_{}".format(i), timesteps=40000)
-        model_trpo = TRPO.load("trained_models/rsi_instead_of_cci/TRPO_50k_dow_{}".format(i))
+        model_trpo = TRPO.load("trained_models/macd+smma+cci+ppo/TRPO_40k_dow_{}".format(i))
                                # .format(i))
         f.write("======TRPO Validation from: " + str(unique_trade_date[i - rebalance_window - validation_window]) + " to " + str(unique_trade_date[i - rebalance_window]) + "\n")
         DRL_validation(model=model_trpo, test_data=validation, test_env=env_val, test_obs=obs_val)
@@ -203,9 +203,9 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 
         ############## Training and Validation ends ##############
 
-        ############## Trading starts ##############
+
         f.write("======Trading from: " + str(unique_trade_date[i - rebalance_window]) + " to " + str(unique_trade_date[i]) + "\n")
-        #print("Used Model: ", model_ensemble)
+
         last_state_ensemble = DRL_prediction(df=df, model=model_ensemble, name="ensemble",
                                              last_state=last_state_ensemble, iter_num=i,
                                              unique_trade_date=unique_trade_date,
@@ -215,7 +215,7 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 
         f.write("============Trading Done============\n")
         f.write(str(last_state_ensemble) + "\n")
-        ############## Trading ends ##############
+
 
     end = time.time()
     f.write("Ensemble Strategy took: " + str((end - start) / 60) + " minutes" + "\n")
@@ -228,8 +228,7 @@ def run_ensemble_strategy_with_our_saved_model(df, unique_trade_date, rebalance_
 def run_ensemble_strategy_with_original_saved_model(df, unique_trade_date, rebalance_window, validation_window) -> None:
     """Ensemble Strategy that combines PPO, A2C and DDPG"""
     print("============Start Ensemble Strategy============")
-    # for ensemble model, it's necessary to feed the last state
-    # of the previous model to the current model as the initial state
+
     last_state_ensemble = []
 
     ppo_sharpe_list = []

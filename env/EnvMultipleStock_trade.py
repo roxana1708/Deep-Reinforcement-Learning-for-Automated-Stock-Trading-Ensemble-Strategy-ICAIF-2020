@@ -22,7 +22,7 @@ TRANSACTION_FEE_PERCENT = 0.001
 # TURBULENCE_THRESHOLD = 140
 REWARD_SCALING = 1e-4
 
-# f = open("output_results/stochastic_rsi_3.txt", "w+")
+# f = open("output_results/stochastic_close_7_smma_3.txt", "w+")
 
 class StockEnvTrade(gym.Env):
     """A stock trading environment for OpenAI gym"""
@@ -39,7 +39,7 @@ class StockEnvTrade(gym.Env):
         # action_space normalization and shape is STOCK_DIM
         self.action_space = spaces.Box(low=-1, high=1, shape=(STOCK_DIM,))
         # Shape = 181: [Current Balance]+[prices 1-30]+[owned shares 1-30] 
-        # +[rsi 1-30]+ [trix 1-30] + [close_7_smma 1-30] + [ppo 1-30]
+        # +[close_7_smma 1-30]+ [macd 1-30] + [cci 1-30] + [ppo 1-30]
         self.observation_space = spaces.Box(low=0, high=np.inf, shape=(181,))
         # load data from a pandas dataframe
         self.data = self.df.loc[self.day, :]
@@ -49,9 +49,9 @@ class StockEnvTrade(gym.Env):
         self.state = [INITIAL_ACCOUNT_BALANCE] + \
                       self.data.adjcp.values.tolist() + \
                       [0]*STOCK_DIM + \
-                      self.data.rsi.values.tolist() + \
-                      self.data.trix.values.tolist() + \
                       self.data.close_7_smma.values.tolist() + \
+                      self.data.macd.values.tolist() + \
+                      self.data.cci.values.tolist() + \
                       self.data.ppo.values.tolist()
         # initialize reward
         self.reward = 0
@@ -191,9 +191,9 @@ class StockEnvTrade(gym.Env):
             self.state = [self.state[0]] + \
                     self.data.adjcp.values.tolist() + \
                     list(self.state[(STOCK_DIM+1):(STOCK_DIM*2+1)]) + \
-                    self.data.rsi.values.tolist() + \
-                    self.data.trix.values.tolist() + \
                     self.data.close_7_smma.values.tolist() + \
+                    self.data.macd.values.tolist() + \
+                    self.data.cci.values.tolist() + \
                     self.data.ppo.values.tolist()
 
             end_total_asset = self.state[0] + \
@@ -224,9 +224,9 @@ class StockEnvTrade(gym.Env):
             self.state = [INITIAL_ACCOUNT_BALANCE] + \
                           self.data.adjcp.values.tolist() + \
                           [0]*STOCK_DIM + \
-                          self.data.rsi.values.tolist() + \
-                          self.data.trix.values.tolist() + \
                           self.data.close_7_smma.values.tolist() + \
+                          self.data.macd.values.tolist() + \
+                          self.data.cci.values.tolist() + \
                           self.data.ppo.values.tolist()
         else:
             previous_total_asset = self.previous_state[0] + \
@@ -248,9 +248,9 @@ class StockEnvTrade(gym.Env):
             self.state = [self.previous_state[0]] + \
                           self.data.adjcp.values.tolist() + \
                           self.previous_state[(STOCK_DIM+1):(STOCK_DIM*2+1)] + \
-                          self.data.rsi.values.tolist() + \
-                          self.data.trix.values.tolist() + \
                           self.data.close_7_smma.values.tolist() + \
+                          self.data.macd.values.tolist() + \
+                          self.data.cci.values.tolist() + \
                           self.data.ppo.values.tolist()
 
         # plt.plot(self.asset_memory, 'r')
